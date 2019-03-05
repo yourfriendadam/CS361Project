@@ -1,11 +1,14 @@
 var mysql = require('mysql');
+var fs = require('fs');
+
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
 var pool = mysql.createPool({
   connectionLimit : 10,
   host            : 'classmysql.engr.oregonstate.edu',
-<<<<<<< HEAD
-  user            : 'cs361_benckesa',
-  password        : '****',
-  database        : 'cs361_benckesa',
+  user            : 'cs340_benckesa',
+  password        : config.dbpassword,
+  database        : 'cs340_benckesa',
   dateStrings     : 'date'
 });
 
