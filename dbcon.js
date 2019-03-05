@@ -6,9 +6,9 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 var pool = mysql.createPool({
   connectionLimit : 10,
   host            : 'classmysql.engr.oregonstate.edu',
-  user            : 'cs340_benckesa',
-  password        : config.dbpassword,
-  database        : 'cs340_benckesa',
+  user            : 'cs361_benckesa',
+  password        : config.db.password,
+  database        : 'cs361_benckesa',
   dateStrings     : 'date'
 });
 
