@@ -9,6 +9,7 @@
   "author": "OSU",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "body-parser": "^1.13.3",
     "express": "^4.16.3",
     "express-handlebars": "^2.0.1",
