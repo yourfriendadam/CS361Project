@@ -16,7 +16,10 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 app.get("/",function(req,res) {
-  res.render('login');  
+  var context = {};
+  context.title = 'Create Account';
+  //landing page currently set to create account page
+  res.render('createAccount', context);  
 });
 
 app.post("/createAccount", function(req, res) {
