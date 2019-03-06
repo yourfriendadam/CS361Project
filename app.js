@@ -22,6 +22,13 @@ app.get("/",function(req,res) {
   res.render('createAccount', context);  
 });
 
+app.get("/createAccount",function(req,res) {
+  var context = {};
+  context.title = 'Create Account';
+  //landing page currently set to create account page
+  res.render('createAccount', context);  
+});
+
 app.post("/createAccount", function(req, res) {
   var q = 'INSERT INTO Users (username, password) VALUES (?, ?)';  
   var inserts = [req.body.username, req.body.password];
