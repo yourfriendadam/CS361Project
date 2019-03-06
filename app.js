@@ -22,18 +22,28 @@ app.get("/",function(req,res) {
   res.render('createAccount', context);  
 });
 
+app.get("/createAccount",function(req,res) {
+  var context = {};
+  context.title = 'Create Account';
+  //landing page currently set to create account page
+  res.render('createAccount', context);  
+});
+
 app.post("/createAccount", function(req, res) {
-  var q = 'INSERT INTO Users (username, password) VALUES (?, ?)';  
+  var context = {};
+  var q1 = 'INSERT INTO Users (username, password) VALUES (?, ?)';  
   var inserts = [req.body.username, req.body.password];
   bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(inserts[1], salt, function(err, salt) {
       if(err) throw err;
       inserts = [req.body.username, salt];
-      mysql.query(q, inserts, function(err, result) {
+      mysql.query(q1, inserts, function(err, result) {
         if(err) {
           console.log(err);
+          context.errorText = "Username already exists. Please try another.";
         }
-        res.render('login');
+        context.successText = "Account successfully created!";
+        res.render('createAccount', context);
       });      
     });
   });
