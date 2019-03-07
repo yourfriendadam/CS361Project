@@ -1,0 +1,8 @@
+{
+  "db": {
+    "host": "db.database.com",
+    "database": "gaslite",
+    "username": "gaslite",
+    "password": "SUPERSECRETPASSWORD"
+  }
+}

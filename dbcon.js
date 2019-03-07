@@ -5,10 +5,10 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 var pool = mysql.createPool({
   connectionLimit : 10,
-  host            : 'classmysql.engr.oregonstate.edu',
-  user            : 'cs361_benckesa',
+  host            : config.db.host,
+  user            : config.db.username,
   password        : config.db.password,
-  database        : 'cs361_benckesa',
+  database        : config.db.database,
   dateStrings     : 'date'
 });
 
