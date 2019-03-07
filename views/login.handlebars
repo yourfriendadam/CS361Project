@@ -4,9 +4,9 @@
         <div class="row">
             <div class="col-sm-5"></div>
             <div class="col-xs-12 col-sm-2">
-                <form action="/createAccount" method="post">
+                <form action="/login" method="post">
                     <fieldset>
-                        <legend>Create Account:</legend>
+                        <legend>Login:</legend>
                         {{!--image sourced from ecowebhosting.co.uk--}}
                         <img src="images/logo.png">
                         <h5 style="color:red">{{errorText}}</h5>
@@ -20,7 +20,7 @@
                         </div>
                         <div>
                             <br>
-                            <input type="submit" value="Create Account" />
+                            <input type="submit" value="Login" />
                             <br>
                             <h5>{{successText}}</h5>
                         </div>
