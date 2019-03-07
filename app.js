@@ -14,7 +14,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 4961);
 
-app.use(express.static('public'));
+app.use(express.static('static'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use( session({
