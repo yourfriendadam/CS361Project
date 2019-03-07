@@ -1,18 +1,25 @@
+// Node packages
 var express = require('express');
-var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
-var bcrypt = require('bcrypt');
-var saltRounds = 10;
-var session = require('express-session');
 var fs = require('fs');
+var session = require('express-session');
+var bcrypt = require('bcrypt');
 
+// Local files
+var mysql = require('./dbcon.js');
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+// Express and Handlebars variables
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
-var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+// Bcrypt password salt configuration
+var saltRounds = 10;
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 4961);
+app.set('port', config.server.port);
+app.set('ip', config.server.ip);
 
 app.use(express.static('static'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -96,8 +103,9 @@ app.use(function(err, req, res, next){
   res.render('500');
 });
 
-app.listen(app.get('port'), function(){
-    console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
+app.listen(app.get('port'), app.get('ip'), function(){
+    console.log('Express started on http://' + app.get('ip') + ':' +
+      app.get('port') + '; press Ctrl-C to terminate.');
 });
 
 // the below is for running from cloud9
