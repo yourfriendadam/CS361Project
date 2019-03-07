@@ -4,5 +4,8 @@
     "database": "gaslite",
     "username": "gaslite",
     "password": "SUPERSECRETPASSWORD"
+  },
+  "session": {
+    "secret": "MORESECRETSTUFF"
   }
 }
