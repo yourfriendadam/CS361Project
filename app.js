@@ -12,7 +12,7 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 // Express and Handlebars variables
 var app = express();
 var handlebars = require('express-handlebars').create({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
 });
 
 // Bcrypt password salt configuration
@@ -46,6 +46,48 @@ app.get("/createAccount", function(req, res) {
     context.title = 'Create Account';
     //landing page currently set to create account page
     res.render('createAccount', context);
+});
+
+app.get("/shower", function(req, res) {
+    var context = {};
+    context.title = 'Take a shower';
+    var q1 = 'SELECT * FROM Showers WHERE user_id = ?';
+    var inserts = [session.userID];
+    mysql.query(q1, inserts, function(err, sqlres) {
+        if (err) {
+            console.log(err);
+            context.errorText = "Error retrieving showers plz try again.";
+        }
+        context.showers = JSON.parse(JSON.stringify(sqlres));
+        res.render('shower', context);
+    });
+});
+
+app.post("/saveShower", function(req, res) {
+    var context = {};
+    var dateObj = new Date();
+    var showerData = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDay(), 0, 0, 0, req.body.watchvalsubmit));
+    var showerTime = showerData.getUTCHours() + ":" + showerData.getUTCMinutes() + ":" + showerData.getUTCSeconds();
+
+    var q1 = 'INSERT INTO Showers (user_id, shower_date, shower_time) VALUES (?, ?, ?)';
+    var inserts = [session.userID, showerData.toLocaleDateString(), showerTime];
+    mysql.query(q1, inserts, function(err, result) {
+        if (err) {
+            console.log(err);
+            context.errorText = "Error inserting data plz try again.";
+        }
+        context.successText = "Data successfully inserted!";
+        var q2 = 'SELECT * FROM Showers WHERE user_id = ?';
+        var inserts2 = [session.userID];
+        mysql.query(q2, inserts2, function(err, sqlres2) {
+            if (err) {
+                console.log(err);
+                context.errorText = "Error retrieving showers plz try again.";
+            }
+            context.showers = JSON.parse(JSON.stringify(sqlres2));
+            res.render('shower', context);
+        });
+    });
 });
 
 app.post("/createAccount", function(req, res) {
