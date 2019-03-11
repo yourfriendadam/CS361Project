@@ -81,7 +81,7 @@ app.post("/saveShower", function(req, res) {
     var showerTime = showerData.getUTCHours() + ":" + showerData.getUTCMinutes() + ":" + showerData.getUTCSeconds();
 
     var q1 = 'INSERT INTO Showers (user_id, shower_date, shower_time) VALUES (?, ?, ?)';
-    var inserts = [session.userID, mysql.escape(showerData.toLocaleDateString()), mysql.escape(showerTime)];
+    var inserts = [session.userID, showerData.toLocaleDateString(), showerTime];
     mysql.query(q1, inserts, function(err, result) {
         if (err) {
             console.log(err);
@@ -104,7 +104,7 @@ app.post("/saveShower", function(req, res) {
 app.post("/createAccount", function(req, res) {
     var context = {};
     var q1 = 'INSERT INTO Users (username, password) VALUES (?, ?)';
-    var inserts = [mysql.escape(req.body.username), mysql.escape(req.body.password)];
+    var inserts = [req.body.username, req.body.password];
     bcrypt.genSalt(saltRounds, function(err, salt) {
         bcrypt.hash(inserts[1], salt, function(err, salt) {
             if (err) throw err;
@@ -124,7 +124,7 @@ app.post("/createAccount", function(req, res) {
 app.post("/login", function(req, postres) {
     var context = {};
     var q1 = 'SELECT ID, username, password FROM Users WHERE username = ?';
-    var inserts = [mysql.escape(req.body.username)];
+    var inserts = [req.body.username];
 
     mysql.query(q1, inserts, function(err, sqlres) {
         if (err) {
