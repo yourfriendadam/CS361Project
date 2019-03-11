@@ -1,36 +1,24 @@
-<body>
-    <div class="container">
-        <div class="row"></div>
-        <div class="row">
-            <div class="col-sm-5"></div>
-            <div class="col-xs-12 col-sm-2">
-                <form action="/createAccount" method="post">
-                    <fieldset>
-                        <legend>Create Account:</legend>
-                        {{!--image sourced from ecowebhosting.co.uk--}}
-                        <img src="images/logo.png">
-                        <h5 style="color:red">{{errorText}}</h5>
-                        <div>
-                            <label>Username:</label>
-                            <input type="text" name="username" required />
-                        </div>
-                        <div>
-                            <label>Password:</label>
-                            <input type="password" name="password" required />
-                        </div>
-                        <div>
-                            <br>
-                            <input type="submit" value="Create Account" />
-                            <br>
-                            <a href="../login">Already have an account? Log in</a>
-                            <br>
-                            <h5>{{successText}}</h5>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="col-sm-5"></div>
+<form action="/createAccount" method="post">
+    <fieldset>
+        <legend>Create Account:</legend>
+        {{!--image sourced from ecowebhosting.co.uk--}}
+        <img src="images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
+        <div>
+            <label>Username:</label>
+            <input type="text" name="username" required />
         </div>
-        <div class="row"></div>
-    </div>
-</body>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required />
+        </div>
+        <div>
+            <br>
+            <input type="submit" value="Create Account" />
+            <br>
+            <a href="../login">Already have an account? Log in</a>
+            <br>
+            <h5>{{successText}}</h5>
+        </div>
+    </fieldset>
+</form>

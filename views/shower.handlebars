@@ -1,53 +1,41 @@
-<body>
-    <div class="container">
-        <div class="row"></div>
-        <div class="row">
-            <div class="col-sm-5"></div>
-            <div class="col-xs-12 col-sm-2">
-                <form action="/saveShower" method="post">
-                    <fieldset>
-                        <legend>Shower Timer</legend>
-                        {{!--image sourced from ecowebhosting.co.uk--}}
-                        <img src="../images/logo.png">
-                        <h5 style="color:red">{{errorText}}</h5>
-                        <div>
-                            <label>Elapsed Time</label>
-                            <div class="stopwatch" id="watchval"></div>
-                            <input type="hidden" name="watchvalsubmit" id="watchvalsubmit" value="">
-                        </div>
-                        <div>
-                            <button type="button" onClick="stopwatch.start();">Start</button>
-                            <button type="button" onClick="stopwatch.stop();">Stop</button>
-                            <button type="button" onClick="stopwatch.clear();">Clear</button>
-                        </div>
-                        <div>
-                            <br>
-                            <input type="submit" value="Save" onclick="return fillHidden();"/>
-                            <br>
-                            <h5>{{successText}}</h5>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Shower Date</th>
-                                    <th>Shower Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each showers}}
-                                <tr>
-                                    <td>{{this.shower_date}}</td>
-                                    <td>{{this.shower_time}}</td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="col-sm-5"></div>
+<form action="/saveShower" method="post">
+    <fieldset>
+        <legend>Shower Timer</legend>
+        {{!--image sourced from ecowebhosting.co.uk--}}
+        <img src="../images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
+        <div>
+            <label>Elapsed Time</label>
+            <div class="stopwatch" id="watchval"></div>
+            <input type="hidden" name="watchvalsubmit" id="watchvalsubmit" value="">
         </div>
-        <div class="row"></div>
-    </div>
-    <script type="text/javascript" src="../scripts/shower.js"></script>
-</body>
+        <div>
+            <button type="button" onClick="stopwatch.start();">Start</button>
+            <button type="button" onClick="stopwatch.stop();">Stop</button>
+            <button type="button" onClick="stopwatch.clear();">Clear</button>
+        </div>
+        <div>
+            <br>
+            <input type="submit" value="Save" onclick="return fillHidden();" />
+            <br>
+            <h5>{{successText}}</h5>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Shower Date</th>
+                    <th>Shower Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each showers}}
+                    <tr>
+                        <td>{{this.shower_date}}</td>
+                        <td>{{this.shower_time}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+<script type="text/javascript" src="../scripts/shower.js"></script>

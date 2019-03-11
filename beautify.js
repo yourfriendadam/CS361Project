@@ -21,9 +21,12 @@ beautify_hash = [{
             'views/404.handlebars',
             'views/500.handlebars',
             'views/createAccount.handlebars',
+            'views/electricity.handlebars',
             'views/foo.handlebars',
+            'views/landing.handlebars',
             'views/layouts/main.handlebars',
             'views/login.handlebars',
+            'views/shower.handlebars',
         ]
     },
 ]

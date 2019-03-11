@@ -1,31 +1,18 @@
-<body>
-    <div class="container">
-        <div class="row"></div>
-        <div class="row">
-            <div class="col-sm-5"></div>
-            <div class="col-xs-12 col-sm-2">
-                <form action="/electricty" method="post">
-                    <fieldset>
-                        <legend>Electricity Tracker</legend>
-                        {{!--image sourced from ecowebhosting.co.uk--}}
-                        <img src="../images/logo.png">
-                        <h5 style="color:red">{{errorText}}</h5>
-                        <div>
-                            <form>
-                              Enter monthly electricity bill:<br>
-                              <input type='text' id='bills' /><br>
-                            </form>
-                            <input type='button' value='Add' id='add' />
-                            <ul style="list-style: none;" id='list_item'>
+<form action="/electricty" method="post">
+    <fieldset>
+        <legend>Electricity Tracker</legend>
+        {{!--image sourced from ecowebhosting.co.uk--}}
+        <img src="../images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
+        <div>
+            <form>
+                Enter monthly electricity bill:<br>
+                <input type='text' id='bills' /><br>
+            </form>
+            <input type='button' value='Add' id='add' />
+            <ul style="list-style: none;" id='list_item'>
 
-                            </ul>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="col-sm-5"></div>
+            </ul>
         </div>
-        <div class="row"></div>
-    </div>
-    <script type="text/javascript" src="../scripts/electricity.js"></script>
-</body>
+    </fieldset>
+</form>
