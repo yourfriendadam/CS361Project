@@ -63,6 +63,12 @@ app.get("/shower", function(req, res) {
     });
 });
 
+app.get("/electricity", function(req, res){
+  var context = {};
+  context.title = 'Record Electricity Use';
+  res.render('electricity', context);
+});
+
 app.post("/saveShower", function(req, res) {
     var context = {};
     var dateObj = new Date();
