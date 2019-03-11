@@ -152,12 +152,14 @@ app.post("/login", function(req, postres) {
                 context.userID = parsedSql[0].ID; //FOR DIAGNOSTICS ONLY
                 session.userID = parsedSql[0].ID;
                 postres.render('foo', context);
+                return;
             } else {
                 console.log("Incorrect username/password.");
                 console.log(bcryptres);
                 console.log(err);
                 context.errorText = "Incorrect username/password.";
-                postres.render('foo', context);
+                postres.render('login', context);
+                return;
             }
         });
     });
