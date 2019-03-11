@@ -36,8 +36,13 @@ app.use(session({
 
 app.get("/", function(req, res) {
     var context = {};
+    context.title = 'Gaslite';
+    res.render('landing', context);
+});
+
+app.get("/login", function(req, res) {
+    var context = {};
     context.title = 'Log In';
-    //landing page currently set to create account page
     res.render('login', context);
 });
 
@@ -63,10 +68,10 @@ app.get("/shower", function(req, res) {
     });
 });
 
-app.get("/electricity", function(req, res){
-  var context = {};
-  context.title = 'Record Electricity Use';
-  res.render('electricity', context);
+app.get("/electricity", function(req, res) {
+    var context = {};
+    context.title = 'Record Electricity Use';
+    res.render('electricity', context);
 });
 
 app.post("/saveShower", function(req, res) {
@@ -76,7 +81,7 @@ app.post("/saveShower", function(req, res) {
     var showerTime = showerData.getUTCHours() + ":" + showerData.getUTCMinutes() + ":" + showerData.getUTCSeconds();
 
     var q1 = 'INSERT INTO Showers (user_id, shower_date, shower_time) VALUES (?, ?, ?)';
-    var inserts = [session.userID, showerData.toLocaleDateString(), showerTime];
+    var inserts = [session.userID, mysql.escape(showerData.toLocaleDateString()), mysql.escape(showerTime)];
     mysql.query(q1, inserts, function(err, result) {
         if (err) {
             console.log(err);
@@ -99,7 +104,7 @@ app.post("/saveShower", function(req, res) {
 app.post("/createAccount", function(req, res) {
     var context = {};
     var q1 = 'INSERT INTO Users (username, password) VALUES (?, ?)';
-    var inserts = [req.body.username, req.body.password];
+    var inserts = [mysql.escape(req.body.username), mysql.escape(req.body.password)];
     bcrypt.genSalt(saltRounds, function(err, salt) {
         bcrypt.hash(inserts[1], salt, function(err, salt) {
             if (err) throw err;
@@ -119,12 +124,22 @@ app.post("/createAccount", function(req, res) {
 app.post("/login", function(req, postres) {
     var context = {};
     var q1 = 'SELECT ID, username, password FROM Users WHERE username = ?';
-    var inserts = [req.body.username];
+    var inserts = [mysql.escape(req.body.username)];
+
     mysql.query(q1, inserts, function(err, sqlres) {
         if (err) {
             console.log(err);
             context.errorText = "LOGIN ERROR PLZ TRY AGAIN.";
+            context.title = 'Log In';
             postres.render('login', context);
+            return;
+        }
+        // If no users are found throw error
+        if (sqlres.length == 0) {
+            context.errorText = "LOGIN ERROR PLZ TRY AGAIN.";
+            context.title = 'Log In';
+            postres.render('login', context);
+            return;
         }
         parsedSql = JSON.parse(JSON.stringify(sqlres));
         bcrypt.compare(req.body.password, parsedSql[0].password, function(err, bcryptres) {
