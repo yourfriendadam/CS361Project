@@ -111,8 +111,12 @@ app.post("/createAccount", function(req, res) {
             inserts = [req.body.username, salt];
             mysql.query(q1, inserts, function(err, result) {
                 if (err) {
-                    console.log(err);
-                    context.errorText = "Username already exists. Please try another.";
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        context.errorText = "Username already exists. Please try another.";
+                    } else {
+                        context.errorText = "Unknown error!";
+                        console.log(err);
+                    }
                 }
                 context.successText = "Account successfully created!";
                 res.render('createAccount', context);
