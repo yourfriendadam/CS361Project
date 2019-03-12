@@ -1,13 +1,14 @@
 {
   "server": {
+    "ip": "127.0.0.1",
     "ip": "localhost",
     "port": 4961
   },
   "db": {
-    "host": "classmysql.engr.oregonstate.edu",
-    "database": "cs361_benckesa",
-    "username": "cs361_benckesa",
-    "password": "SECRETSTUFF"
+    "host": "db.database.com",
+    "database": "gaslite",
+    "username": "gaslite",
+    "password": "SUPERSECRETPASSWORD"
   },
   "session": {
     "secret": "MORESECRETSTUFF"
