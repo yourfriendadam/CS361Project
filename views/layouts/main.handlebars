@@ -9,15 +9,38 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-entities" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="TrackMenu" class="navbar-brand">Home</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-entities">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="../shower">Shower Clock</a>
+                    </li>   
+                    <li>
+                        <a href="../electricity">Electricity</a>
+                    </li>                                               
+                </ul>   
+            </div>          
+        </div>
+    </nav>
     <div class="container">
         <div class="row"></div>
         <div class="row">
-            <div class="col-sm-5"></div>
-            <div class="col-xs-12 col-sm-2">
+            <div class="col-sm-4"></div>
+            <div class="col-xs-12 col-sm-4">
                 {{{body}}}
             </div>
         </div>
-        <div class="col-sm-5"></div>
+        <div class="col-sm-4"></div>
     </div>
     <div class="row"></div>
     </div>

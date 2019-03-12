@@ -165,6 +165,12 @@ app.post("/login", function(req, postres) {
     });
 });
 
+app.get("/trackMenu", function(req, res) {
+    var context = {};
+    context.title = 'Tracking Menu';
+    res.render('foo', context);
+});
+
 app.use(function(req, res) {
     res.status(404);
     res.render('404');
