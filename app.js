@@ -74,6 +74,12 @@ app.get("/electricity", function(req, res) {
     res.render('electricity', context);
 });
 
+app.get("/food", function(req, res) {
+    var context = {};
+    context.title = 'Record Food Consumption';
+    res.render('food', context);
+});
+
 app.post("/saveShower", function(req, res) {
     var context = {};
     var dateObj = new Date();
@@ -99,6 +105,17 @@ app.post("/saveShower", function(req, res) {
             res.render('shower', context);
         });
     });
+});
+
+app.post('/food', function(req, res) {
+  var q1 = 'INSERT INTO Food (userID, foodType, Description) VALUES (?, ?, ?)';
+  var inserts = [session.userID, req.body.foodType, req.body.foodDesc];
+  mysql.query(q1, inserts, function(err, result) {
+    if(err) {
+      console.log(err);
+    }
+    res.render('food');
+  });
 });
 
 app.post("/createAccount", function(req, res) {
