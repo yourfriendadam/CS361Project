@@ -80,6 +80,12 @@ app.get("/food", function(req, res) {
     res.render('food', context);
 });
 
+app.get("/water", function(req, res) {
+    var context = {};
+    context.title = 'Record Water Usage';
+    res.render('water', context);
+});
+
 app.post("/saveShower", function(req, res) {
     var context = {};
     var dateObj = new Date();
