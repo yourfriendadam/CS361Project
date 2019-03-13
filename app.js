@@ -108,15 +108,23 @@ app.post("/saveShower", function(req, res) {
 });
 
 app.post('/food', function(req, res) {
-  var q1 = 'INSERT INTO Food (userID, foodType, Description) VALUES (?, ?, ?)';
-  var inserts = [session.userID, req.body.foodType, req.body.foodDesc];
-  mysql.query(q1, inserts, function(err, result) {
-    if(err) {
-      console.log(err);
-    }
-    res.render('food');
-  });
+    var context = {};
+    var q1 = 'INSERT INTO Food (userID, foodType, Description) VALUES (?, ?, ?)';
+    var inserts = [session.userID, req.body.foodType, req.body.foodDesc];
+    mysql.query(q1, inserts, function(err, result) {
+        if(err) {
+            if (err.code === 'ER_BAD_NULL_ERROR') {
+                context.errorText = "You are not currently logged in. Please go to the login page.";
+            } 
+            else {
+                context.errorText = "Unknown error!";
+                console.log(err);
+            }
+        }
+        res.render('food', context);
+    });
 });
+
 
 app.post("/createAccount", function(req, res) {
     var context = {};

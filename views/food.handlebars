@@ -3,6 +3,7 @@
         <legend>Food Tracker</legend>
         {{!--image sourced from ecowebhosting.co.uk--}}
         <img src="../images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
         <div>
             <form>
                 Meal Type:
@@ -17,7 +18,7 @@
                 <br>
                 <br>
                 <label id="foodDescLabel">Further Description of Meal:
-                    <input type="text" name="foodDesc" id="foodDesc" style="height:50px">
+                    <input type="text" name="foodDesc" id="foodDesc" placeholder="Food Description">
                 </label>
                 <br>
             </form>
