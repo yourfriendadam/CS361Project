@@ -148,7 +148,7 @@ app.post('/food', function(req, res) {
                 console.log(err);
                 context.errorText = "Error retrieving food plz try again.";
             }
-            context.transport = JSON.parse(JSON.stringify(sqlres2));
+            context.food = JSON.parse(JSON.stringify(sqlres2));
             res.render('food', context);
         });
     });
