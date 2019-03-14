@@ -77,7 +77,16 @@ app.get("/electricity", function(req, res) {
 app.get("/food", function(req, res) {
     var context = {};
     context.title = 'Record Food Consumption';
-    res.render('food', context);
+    var q1 = 'SELECT * FROM Food WHERE userID = ?';
+    var inserts1 = [session.userID];
+    mysql.query(q1, inserts1, function(err, sqlres1) {
+        if (err) {
+            console.log(err);
+            context.errorText = "Error retrieving food plz try again.";
+        }
+        context.food = JSON.parse(JSON.stringify(sqlres1));
+        res.render('food', context);
+    });
 });
 
 
@@ -91,15 +100,15 @@ app.get("/transportation", function(req, res) {
     var context = {};
     context.title = 'Transportation Info';
     var q1 = 'SELECT * FROM Transportation WHERE user_id = ?';
-        var inserts1 = [session.userID];
-        mysql.query(q1, inserts1, function(err, sqlres1) {
-            if (err) {
-                console.log(err);
-                context.errorText = "Error retrieving transport plz try again.";
-            }
-            context.transport = JSON.parse(JSON.stringify(sqlres1));
-            res.render('transportation', context);
-        });
+    var inserts1 = [session.userID];
+    mysql.query(q1, inserts1, function(err, sqlres1) {
+        if (err) {
+            console.log(err);
+            context.errorText = "Error retrieving transport plz try again.";
+        }
+        context.transport = JSON.parse(JSON.stringify(sqlres1));
+        res.render('transportation', context);
+    });
 });
 
 app.post("/saveShower", function(req, res) {
@@ -137,13 +146,24 @@ app.post('/food', function(req, res) {
         if(err) {
             if (err.code === 'ER_BAD_NULL_ERROR') {
                 context.errorText = "You are not currently logged in. Please go to the login page.";
-            } 
+            }
             else {
                 context.errorText = "Unknown error!";
-                console.log(err);
             }
         }
-        res.render('food', context);
+        else {
+            context.successText = "Data successfully inserted!";            
+        }
+        var q2 = 'SELECT * FROM Food WHERE userID = ?';
+        var inserts2 = [session.userID];
+        mysql.query(q2, inserts2, function(err, sqlres2) {
+            if (err) {
+                console.log(err);
+                context.errorText = "Error retrieving food plz try again.";
+            }
+            context.food = JSON.parse(JSON.stringify(sqlres2));
+            res.render('food', context);
+        });
     });
 });
 
