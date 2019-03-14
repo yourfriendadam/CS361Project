@@ -1,0 +1,32 @@
+<form action="/water" method="post">
+    <fieldset>
+        <legend>Water Tracker</legend>
+        {{!--image sourced from ecowebhosting.co.uk--}}
+        <img src="../images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
+        <div>
+            <form>
+                Enter running faucet use in minutes:<br>
+                <br>
+                <input type='text' id='faucet' /><br>
+                <input type='button' value='Add' id='add' />
+            </form>
+
+            <form>
+                <br>
+                Enter amount of toilet flushes:<br>
+                <br>
+                <input type='text' id='flushes' /><br>
+                <input type='button' value='Add' id='add' />
+            </form>
+
+            <form>
+                <br>
+                Enter shower time in minutes:<br>
+                <br>
+                <input type='text' id='shower' /><br>
+                <input type='button' value='Add' id='add' />
+            </form>
+        </div>
+    </fieldset>
+</form>

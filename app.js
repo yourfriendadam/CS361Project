@@ -80,6 +80,13 @@ app.get("/food", function(req, res) {
     res.render('food', context);
 });
 
+
+app.get("/water", function(req, res) {
+    var context = {};
+    context.title = 'Record Water Usage';
+    res.render('water', context);
+});
+
 app.get("/transportation", function(req, res) {
     var context = {};
     context.title = 'Transportation Info';
@@ -93,7 +100,8 @@ app.get("/transportation", function(req, res) {
             context.transport = JSON.parse(JSON.stringify(sqlres1));
             res.render('transportation', context);
         });
-});
+
+
 
 app.post("/saveShower", function(req, res) {
     var context = {};
