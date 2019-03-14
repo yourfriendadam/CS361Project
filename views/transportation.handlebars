@@ -27,22 +27,22 @@
             <h5>{{successText}}</h5>
         </div>
         {{#if transport}}
-        <table>
+        <table border="1">
             <thead>
                 <tr>
-                    <th>Distance</th>
-                    <th>MPG</th>
-                    <th>Transportation Type</th>
-                    <th>Date</th>
+                    <th style="padding: 5px">Distance</th>
+                    <th style="padding: 5px">MPG</th>
+                    <th style="padding: 5px">Transportation Type</th>
+                    <th style="padding: 5px">Date</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each transport}}
                     <tr>
-                        <td>{{this.distance}}</td>
-                        <td>{{this.mpg}}</td>
-                        <td>{{this.transportation_type}}</td>
-                        <td>{{this.transportation_date}}</td>
+                        <td style="padding: 5px">{{this.distance}}</td>
+                        <td style="padding: 5px">{{this.mpg}}</td>
+                        <td style="padding: 5px">{{this.transportation_type}}</td>
+                        <td style="padding: 5px">{{this.transportation_date}}</td>
                     </tr>
                 {{/each}}
             </tbody>

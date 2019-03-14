@@ -24,6 +24,25 @@
             </form>
             <br>
             <input type='submit' value='Add Meal'>
+            <h5>{{successText}}</h5>
         </div>
+        {{#if food}}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th style="padding: 5px">Meal Type</th>
+                    <th style="padding: 5px">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each food}}
+                    <tr>
+                        <td style="padding: 5px">{{this.foodType}}</td>
+                        <td style="padding: 5px">{{this.Description}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
     </fieldset>
 </form>
