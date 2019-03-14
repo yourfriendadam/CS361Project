@@ -1,0 +1,52 @@
+<form action="/saveTransportation" method="post">
+    <fieldset>
+        <legend>Transportation Information</legend>
+        {{!--image sourced from ecowebhosting.co.uk--}}
+        <img src="../images/logo.png">
+        <h5 style="color:red">{{errorText}}</h5>
+        <div>
+            <label>Miles travelled:</label>
+            <input type="number" name="distance" required />
+        </div>
+        <div>
+            <label>Miles per gallon:</label>
+            <input type="number" name="mpg" required />
+        </div>
+        <div>
+            <label>Transportation type:</label>
+            <input type="text" name="transportationType" required />
+        </div>
+        <div>
+            <label>Date:</label>
+            <input type="date" name="transportationDate" required />
+        </div>
+        <div>
+            <br>
+            <input type="submit" value="Save" />
+            <br>
+            <h5>{{successText}}</h5>
+        </div>
+        {{#if transport}}
+        <table>
+            <thead>
+                <tr>
+                    <th>Distance</th>
+                    <th>MPG</th>
+                    <th>Transportation Type</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each transport}}
+                    <tr>
+                        <td>{{this.distance}}</td>
+                        <td>{{this.mpg}}</td>
+                        <td>{{this.transportation_type}}</td>
+                        <td>{{this.transportation_date}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
+    </fieldset>
+</form>

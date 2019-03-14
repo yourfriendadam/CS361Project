@@ -80,11 +80,28 @@ app.get("/food", function(req, res) {
     res.render('food', context);
 });
 
+
 app.get("/water", function(req, res) {
     var context = {};
     context.title = 'Record Water Usage';
     res.render('water', context);
 });
+
+app.get("/transportation", function(req, res) {
+    var context = {};
+    context.title = 'Transportation Info';
+    var q1 = 'SELECT * FROM Transportation WHERE user_id = ?';
+        var inserts1 = [session.userID];
+        mysql.query(q1, inserts1, function(err, sqlres1) {
+            if (err) {
+                console.log(err);
+                context.errorText = "Error retrieving transport plz try again.";
+            }
+            context.transport = JSON.parse(JSON.stringify(sqlres1));
+            res.render('transportation', context);
+        });
+
+
 
 app.post("/saveShower", function(req, res) {
     var context = {};
@@ -131,6 +148,29 @@ app.post('/food', function(req, res) {
     });
 });
 
+app.post("/saveTransportation", function(req, res) {
+    var context = {};
+
+    var q1 = 'INSERT INTO Transportation (user_id, distance, mpg, transportation_type, transportation_date) VALUES (?, ?, ?, ?, ?)';
+    var inserts = [session.userID, req.body.distance, req.body.mpg, req.body.transportationType, req.body.transportationDate];
+    mysql.query(q1, inserts, function(err, result) {
+        if (err) {
+            console.log(err);
+            context.errorText = "Error inserting data plz try again.";
+        }
+        context.successText = "Data successfully inserted!";
+        var q2 = 'SELECT * FROM Transportation WHERE user_id = ?';
+        var inserts2 = [session.userID];
+        mysql.query(q2, inserts2, function(err, sqlres2) {
+            if (err) {
+                console.log(err);
+                context.errorText = "Error retrieving transport plz try again.";
+            }
+            context.transport = JSON.parse(JSON.stringify(sqlres2));
+            res.render('transportation', context);
+        });
+    });
+});
 
 app.post("/createAccount", function(req, res) {
     var context = {};
