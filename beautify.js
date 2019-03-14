@@ -26,6 +26,7 @@ beautify_hash = [{
             'views/landing.handlebars',
             'views/layouts/main.handlebars',
             'views/login.handlebars',
+            'views/logout.handlebars',
             'views/shower.handlebars',
         ]
     },
