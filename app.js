@@ -136,11 +136,17 @@ app.post('/food', function(req, res) {
     var q1 = 'INSERT INTO Food (userID, foodType, Description) VALUES (?, ?, ?)';
     var inserts = [session.userID, req.body.foodType, req.body.foodDesc];
     mysql.query(q1, inserts, function(err, result) {
-        if (err) {
-            console.log(err);
-            context.errorText = "Error inserting data plz try again.";
+        if(err) {
+            if (err.code === 'ER_BAD_NULL_ERROR') {
+                context.errorText = "You are not currently logged in. Please go to the login page.";
+            }
+            else {
+                context.errorText = "Unknown error!";
+            }
         }
-        context.successText = "Data successfully inserted!";
+        else {
+            context.successText = "Data successfully inserted!";            
+        }
         var q2 = 'SELECT * FROM Food WHERE userID = ?';
         var inserts2 = [session.userID];
         mysql.query(q2, inserts2, function(err, sqlres2) {
