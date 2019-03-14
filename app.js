@@ -169,9 +169,8 @@ app.post('/food', function(req, res) {
             } else {
                 context.errorText = "Unknown error!";
             }
-        }
-        else {
-            context.successText = "Data successfully inserted!";            
+        } else {
+            context.successText = "Data successfully inserted!";
         }
         var q2 = 'SELECT * FROM Food WHERE userID = ?';
         var inserts2 = [session.userID];
