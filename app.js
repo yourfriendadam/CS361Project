@@ -100,8 +100,7 @@ app.get("/transportation", function(req, res) {
             context.transport = JSON.parse(JSON.stringify(sqlres1));
             res.render('transportation', context);
         });
-
-
+});
 
 app.post("/saveShower", function(req, res) {
     var context = {};
