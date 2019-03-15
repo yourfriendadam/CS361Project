@@ -1,4 +1,4 @@
-<form action="/electricty" method="post">
+<form action="/electricity" method="post">
     <fieldset>
         <legend>Electricity Tracker</legend>
         {{!--image sourced from ecowebhosting.co.uk--}}
@@ -8,13 +8,14 @@
             <form>
                 Enter monthly electricity bill:<br>
                 <br>
-                <input type='text' id='bills' /><br>
+                <input type='text' id='bills' name='bills' /><br>
             </form>
             <br>
-            <input type='button' value='Add' id='add' />
+            <input type='Submit' value='Add' id='add' />
             <ul style="list-style: none;" id='list_item'>
 
             </ul>
+            <h5>{{successText}}</h5>
         </div>
     </fieldset>
 </form>
