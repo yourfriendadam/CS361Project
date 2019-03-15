@@ -187,19 +187,14 @@ app.post('/food', function(req, res) {
 
 app.post('/water', function(req, res) {
     var context = initContext(req);
-    
+
     var q1 = 'INSERT INTO Water (userID, faucet, flushes, shower) VALUES (?, ?, ?, ?)';
     var inserts = [req.session.userID, req.body.faucet, req.body.flushes, req.body.shower];
-    console.log(req.session.userID);
-    console.log(req.body.faucet);
-    console.log(req.body.flushes);
-    console.log(req.body.shower);
     mysql.query(q1, inserts, function(err, result) {
-        if(err) {
+        if (err) {
             if (err.code === 'ER_BAD_NULL_ERROR') {
                 context.errorText = "You are not currently logged in. Please go to the login page.";
-            } 
-            else {
+            } else {
                 context.errorText = "Unknown error!";
                 console.log(err);
             }
