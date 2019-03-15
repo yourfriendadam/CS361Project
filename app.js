@@ -165,9 +165,10 @@ app.post("/saveShower", function(req, res) {
     var dateObj = new Date();
     var showerData = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDay(), 0, 0, 0, req.body.watchvalsubmit));
     var showerTime = showerData.getUTCHours() + ":" + showerData.getUTCMinutes() + ":" + showerData.getUTCSeconds();
+    var showerDate = showerData.getUTCFullYear() + "-" + (showerData.getUTCMonth() + 1) + "-" + showerData.getUTCDate();
 
     var q1 = 'INSERT INTO Showers (user_id, shower_date, shower_time) VALUES (?, ?, ?)';
-    var inserts = [req.session.userID, showerData.toLocaleDateString(), showerTime];
+    var inserts = [req.session.userID, showerDate, showerTime];
     mysql.query(q1, inserts, function(err, result) {
         if (err) {
             console.log(err);
