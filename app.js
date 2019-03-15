@@ -186,9 +186,14 @@ app.post('/food', function(req, res) {
 });
 
 app.post('/water', function(req, res) {
-    var context = {};
+    var context = initContext(req);
+    
     var q1 = 'INSERT INTO Water (userID, faucet, flushes, shower) VALUES (?, ?, ?, ?)';
-    var inserts = [session.userID, req.body.faucet, req.body.flushes, req.body.shower];
+    var inserts = [req.session.userID, req.body.faucet, req.body.flushes, req.body.shower];
+    console.log(req.session.userID);
+    console.log(req.body.faucet);
+    console.log(req.body.flushes);
+    console.log(req.body.shower);
     mysql.query(q1, inserts, function(err, result) {
         if(err) {
             if (err.code === 'ER_BAD_NULL_ERROR') {
