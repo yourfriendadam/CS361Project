@@ -5,28 +5,26 @@
         <img src="../images/logo.png">
         <h5 style="color:red">{{errorText}}</h5>
         <div>
-            <form>
-                Enter running faucet use in minutes:<br>
-                <br>
-                <input type='text' id='faucet' /><br>
-                <input type='button' value='Add' id='add' />
-            </form>
-
-            <form>
-                <br>
-                Enter amount of toilet flushes:<br>
-                <br>
-                <input type='text' id='flushes' /><br>
-                <input type='button' value='Add' id='add' />
-            </form>
-
-            <form>
-                <br>
-                Enter shower time in minutes:<br>
-                <br>
-                <input type='text' id='shower' /><br>
-                <input type='button' value='Add' id='add' />
-            </form>
+            <label>Minutes of faucet use:</label>
+            <input type='number' id='faucet' />
+            <br>
+        </div>
+        <div>
+            <label>Number of toilet flushes:</label>
+            <input type='number' id='flushes' />
+            <br>
+        </div>
+        <div>
+            <label>Shower time in minutes:</label>
+            <input type='number' id='shower' />
+            <br>
+        </div>
+        <div>
+            <br>
+            <input type='button' value='Add' id='add' />
+            <ul style="list-style: none;" id='list_item'>
+            </ul>
+            <h5>{{successText}}</h5>
         </div>
     </fieldset>
 </form>
