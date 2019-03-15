@@ -1,7 +1,14 @@
-<legend>Eco Score</legend>
-{{!--image sourced from ecowebhosting.co.uk--}}
-<img src="../images/logo.png">
+<center><img src="../images/logo.png"></center>
 <h5 style="color:red">{{errorText}}</h5>
+{{#if username}}
 <div>
-  <h5>Current ecoscore:</h5>
+  <center><h2>Current ecoscore</h2></center>
 </div>
+<div>
+  <center><h1 style="color:green;font-size:5em">{{ecoscore}}</h1></center>
+</div>
+{{else}}
+<div>
+  <center><h2>Please login to view your ecoscore!</h2></center>
+</div>
+{{/if}}

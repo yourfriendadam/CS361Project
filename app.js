@@ -89,31 +89,104 @@ app.get("/shower", function(req, res) {
     });
 });
 
+// Calls the callback function with the ecoscore
+function calcEcoscore(userID, callback) {
+    var inserts = [userID];
+    var functions = {
+        showers: function(callback) {
+            mysql.query('SELECT shower_time FROM Showers WHERE user_id = ?', inserts, callback)
+        },
+        food: function(callback) {
+            mysql.query('SELECT foodType FROM Food WHERE userID = ?', inserts, callback)
+        },
+        electricity: function(callback) {
+            mysql.query('SELECT amount FROM Electricity WHERE user_id = ?', inserts, callback)
+        },
+        transportation: function(callback) {
+            mysql.query('SELECT distance,mpg FROM Transportation WHERE user_id = ?', inserts, callback)
+        },
+        water: function(callback) {
+            mysql.query('SELECT faucet,flushes,shower FROM Water WHERE userID = ?', inserts, callback)
+        },
+    };
+
+    // Run each of the above functions in parallel, then parse the results
+    // in a combined object called 'results'
+    parallel(functions, function(err, results) {
+            if (err) {
+                console.log(err);
+                callback(err, -1);
+            }
+            results = JSON.parse(JSON.stringify(results));
+
+            // Start eco-score at 1000 pts, and subtract or add from there
+            ecoscore = 1000;
+
+            // parse food
+            results.food.forEach(function(foodEntry) {
+                switch (foodEntry.foodType) {
+                    case 'meat':
+                        ecoscore += 10;
+                        break;
+                    case 'fat':
+                        ecoscore += 5;
+                        break;
+                    case 'half':
+                        ecoscore -= 5;
+                        break;
+                    case 'veggie':
+                        ecoscore -= 10;
+                        break;
+                    default:
+                        console.log("Invalid food type: ", foodEntry.foodType);
+                }
+            });
+            // parse showers
+            results.showers.forEach(function(showerEntry) {
+                var timeStr = showerEntry.shower_time.split(":");
+                var seconds = (timeStr[0] * 60 * 60) + (timeStr[1] * 60) +
+                    timeStr[2];
+                // Assuming average 5 minute shower, 1 pt for 5 minutes
+                ecoscore += (seconds - (5 * 60)) / 5;
+            });
+            // parse electricity
+            results.electricity.forEach(function(electricityEntry) {
+                // Assuming average $150 electricity bill
+                ecoscore += (electricityEntry.amount - 150)/10;
+            });
+            // parse transportation
+            results.transportation.forEach(function(transportationEntry) {
+                // Transportation type is free-form, so we can't use it
+                ecoscore += (transportationEntry.distance *
+                    transportationEntry.mpg) / 10;
+            });
+            // parse water
+            results.water.forEach(function(waterEntry) {
+                ecoscore += (waterEntry.faucet * 3) + (waterEntry.flushes * 5) +
+                    (waterEntry.shower * 7) - 25;
+            });
+            // Finally, call the callback with the freshly minted ecoscore
+            callback(err, Math.ceil(ecoscore));
+    });
+}
+
 app.get("/ecoscore", function(req, res) {
     var context = initContext(req);
     context.title = 'Your eco-score';
 
     if (req.session.userID) {
-        var inserts = [req.session.userID];
-        var functions = { 
-            showers:        function (callback) { mysql.query('SELECT shower_date,shower_time FROM Showers WHERE user_id = ?' , inserts, callback) },
-            food:           function (callback) { mysql.query('SELECT foodType FROM Food WHERE userID = ?'                   , inserts, callback) },
-            electricity:    function (callback) { mysql.query('SELECT amount FROM Electricity WHERE user_id = ?'              , inserts, callback) },
-            transportation: function (callback) { mysql.query('SELECT distance,mpg FROM Transportation WHERE user_id = ?'     , inserts, callback) },
-            water:          function (callback) { mysql.query('SELECT faucet,flushes,shower FROM Water WHERE userID = ?'     , inserts, callback) },
-        };
- 
-        parallel(functions, function (err, results) {
+        calcEcoscore(req.session.userID, function(err, ecoscore) {
             if (err) {
                 console.log(err);
                 context.errorText = "Error retrieving plz try again.";
+                res.render('ecoscore', context);
+                return;
             }
-            results = JSON.parse(JSON.stringify(results));
-            console.log(results);
+            context.ecoscore = ecoscore;
             res.render('ecoscore', context);
         });
     } else {
-        res.render('ecoscore', context);
+      res.render('ecoscore', context);
     }
 });
 
