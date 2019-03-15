@@ -5,6 +5,7 @@ var fs = require('fs');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var bcrypt = require('bcrypt');
+var parallel = require('run-parallel');
 
 // Local files
 var mysql = require('./dbcon.js');
@@ -86,6 +87,34 @@ app.get("/shower", function(req, res) {
         context.showers = JSON.parse(JSON.stringify(sqlres));
         res.render('shower', context);
     });
+});
+
+app.get("/ecoscore", function(req, res) {
+    var context = initContext(req);
+    context.title = 'Your eco-score';
+
+    if (req.session.userID) {
+        var inserts = [req.session.userID];
+        var functions = { 
+            showers:        function (callback) { mysql.query('SELECT shower_date,shower_time FROM Showers WHERE user_id = ?' , inserts, callback) },
+            food:           function (callback) { mysql.query('SELECT foodType FROM Food WHERE userID = ?'                   , inserts, callback) },
+            electricity:    function (callback) { mysql.query('SELECT amount FROM Electricity WHERE user_id = ?'              , inserts, callback) },
+            transportation: function (callback) { mysql.query('SELECT distance,mpg FROM Transportation WHERE user_id = ?'     , inserts, callback) },
+            water:          function (callback) { mysql.query('SELECT faucet,flushes,shower FROM Water WHERE userID = ?'     , inserts, callback) },
+        };
+ 
+        parallel(functions, function (err, results) {
+            if (err) {
+                console.log(err);
+                context.errorText = "Error retrieving plz try again.";
+            }
+            results = JSON.parse(JSON.stringify(results));
+            console.log(results);
+            res.render('ecoscore', context);
+        });
+    } else {
+        res.render('ecoscore', context);
+    }
 });
 
 app.get("/electricity", function(req, res) {
