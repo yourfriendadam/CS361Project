@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 var bcrypt = require('bcrypt');
 
 // Local files
@@ -18,6 +19,18 @@ var handlebars = require('express-handlebars').create({
 // Bcrypt password salt configuration
 var saltRounds = 10;
 
+// mysql session store options
+var sessionStore = new MySQLStore({}, mysql);
+
+// Initializes the context varable with initial username value
+function initContext(req) {
+    var context = {};
+    if (req.session.username) {
+        context.username = req.session.username;
+    }
+    return context;
+}
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', config.server.port);
@@ -30,34 +43,41 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(session({
     secret: config.session.secret,
+    store: sessionStore,
     resave: false,
     saveUninitialized: true
 }));
 
 app.get("/", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Gaslite';
     res.render('landing', context);
 });
 
 app.get("/login", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Log In';
     res.render('login', context);
 });
 
+app.get("/logout", function(req, res) {
+    var context = initContext(req);
+    context.title = 'Log Out';
+    res.render('logout', context);
+});
+
 app.get("/createAccount", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Create Account';
     //landing page currently set to create account page
     res.render('createAccount', context);
 });
 
 app.get("/shower", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Take a shower';
     var q1 = 'SELECT * FROM Showers WHERE user_id = ?';
-    var inserts = [session.userID];
+    var inserts = [req.session.userID];
     mysql.query(q1, inserts, function(err, sqlres) {
         if (err) {
             console.log(err);
@@ -69,13 +89,13 @@ app.get("/shower", function(req, res) {
 });
 
 app.get("/electricity", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Record Electricity Use';
     res.render('electricity', context);
 });
 
 app.get("/food", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Record Food Consumption';
     var q1 = 'SELECT * FROM Food WHERE userID = ?';
     var inserts1 = [session.userID];
@@ -91,16 +111,16 @@ app.get("/food", function(req, res) {
 
 
 app.get("/water", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Record Water Usage';
     res.render('water', context);
 });
 
 app.get("/transportation", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Transportation Info';
     var q1 = 'SELECT * FROM Transportation WHERE user_id = ?';
-    var inserts1 = [session.userID];
+    var inserts1 = [req.session.userID];
     mysql.query(q1, inserts1, function(err, sqlres1) {
         if (err) {
             console.log(err);
@@ -112,13 +132,13 @@ app.get("/transportation", function(req, res) {
 });
 
 app.post("/saveShower", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     var dateObj = new Date();
     var showerData = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDay(), 0, 0, 0, req.body.watchvalsubmit));
     var showerTime = showerData.getUTCHours() + ":" + showerData.getUTCMinutes() + ":" + showerData.getUTCSeconds();
 
     var q1 = 'INSERT INTO Showers (user_id, shower_date, shower_time) VALUES (?, ?, ?)';
-    var inserts = [session.userID, showerData.toLocaleDateString(), showerTime];
+    var inserts = [req.session.userID, showerData.toLocaleDateString(), showerTime];
     mysql.query(q1, inserts, function(err, result) {
         if (err) {
             console.log(err);
@@ -126,7 +146,7 @@ app.post("/saveShower", function(req, res) {
         }
         context.successText = "Data successfully inserted!";
         var q2 = 'SELECT * FROM Showers WHERE user_id = ?';
-        var inserts2 = [session.userID];
+        var inserts2 = [req.session.userID];
         mysql.query(q2, inserts2, function(err, sqlres2) {
             if (err) {
                 console.log(err);
@@ -139,20 +159,18 @@ app.post("/saveShower", function(req, res) {
 });
 
 app.post('/food', function(req, res) {
-    var context = {};
+    var context = initContext(req);
     var q1 = 'INSERT INTO Food (userID, foodType, Description) VALUES (?, ?, ?)';
-    var inserts = [session.userID, req.body.foodType, req.body.foodDesc];
+    var inserts = [req.session.userID, req.body.foodType, req.body.foodDesc];
     mysql.query(q1, inserts, function(err, result) {
-        if(err) {
+        if (err) {
             if (err.code === 'ER_BAD_NULL_ERROR') {
                 context.errorText = "You are not currently logged in. Please go to the login page.";
-            }
-            else {
+            } else {
                 context.errorText = "Unknown error!";
             }
-        }
-        else {
-            context.successText = "Data successfully inserted!";            
+        } else {
+            context.successText = "Data successfully inserted!";
         }
         var q2 = 'SELECT * FROM Food WHERE userID = ?';
         var inserts2 = [session.userID];
@@ -168,10 +186,10 @@ app.post('/food', function(req, res) {
 });
 
 app.post("/saveTransportation", function(req, res) {
-    var context = {};
+    var context = initContext(req);
 
     var q1 = 'INSERT INTO Transportation (user_id, distance, mpg, transportation_type, transportation_date) VALUES (?, ?, ?, ?, ?)';
-    var inserts = [session.userID, req.body.distance, req.body.mpg, req.body.transportationType, req.body.transportationDate];
+    var inserts = [req.session.userID, req.body.distance, req.body.mpg, req.body.transportationType, req.body.transportationDate];
     mysql.query(q1, inserts, function(err, result) {
         if (err) {
             console.log(err);
@@ -179,7 +197,7 @@ app.post("/saveTransportation", function(req, res) {
         }
         context.successText = "Data successfully inserted!";
         var q2 = 'SELECT * FROM Transportation WHERE user_id = ?';
-        var inserts2 = [session.userID];
+        var inserts2 = [req.session.userID];
         mysql.query(q2, inserts2, function(err, sqlres2) {
             if (err) {
                 console.log(err);
@@ -192,7 +210,7 @@ app.post("/saveTransportation", function(req, res) {
 });
 
 app.post("/createAccount", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     var q1 = 'INSERT INTO Users (username, password) VALUES (?, ?)';
     var inserts = [req.body.username, req.body.password];
     bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -215,8 +233,22 @@ app.post("/createAccount", function(req, res) {
     });
 });
 
+app.post("/logout", function(req, postres) {
+    var context = initContext(req);
+    if (context.username) {
+        delete req.session.username;
+        delete req.session.userID;
+        context = {};
+        context.title = 'Log in';
+        context.successText = "Successfully logged out!";
+        postres.render('login', context);
+        return;
+    }
+    postres.render('logout', context);
+});
+
 app.post("/login", function(req, postres) {
-    var context = {};
+    var context = initContext(req);
     var q1 = 'SELECT ID, username, password FROM Users WHERE username = ?';
     var inserts = [req.body.username];
 
@@ -240,7 +272,9 @@ app.post("/login", function(req, postres) {
             if (bcryptres == true) {
                 context.successText = "Login success!";
                 context.userID = parsedSql[0].ID; //FOR DIAGNOSTICS ONLY
-                session.userID = parsedSql[0].ID;
+                req.session.userID = parsedSql[0].ID;
+                req.session.username = parsedSql[0].username;
+                context.username = parsedSql[0].username;
                 postres.render('foo', context);
                 return;
             } else {
@@ -256,7 +290,7 @@ app.post("/login", function(req, postres) {
 });
 
 app.get("/trackMenu", function(req, res) {
-    var context = {};
+    var context = initContext(req);
     context.title = 'Tracking Menu';
     res.render('foo', context);
 });

@@ -1,0 +1,17 @@
+{{#if username}}
+    <form action="/logout" method="post">
+        <fieldset>
+            <legend>Logout:</legend>
+            {{!--image sourced from ecowebhosting.co.uk--}}
+            <img src="images/logo.png">
+            <div>
+                <br>
+                <h5>Are you sure you want to log out?</h5>
+                <br>
+                <input type="submit" value="Logout" />
+            </div>
+        </fieldset>
+    </form>
+{{else}}
+    <h1 href="/login">You are not logged in!</h1>
+{{/if}}

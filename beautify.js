@@ -23,10 +23,14 @@ beautify_hash = [{
             'views/createAccount.handlebars',
             'views/electricity.handlebars',
             'views/foo.handlebars',
+            'views/food.handlebars',
             'views/landing.handlebars',
             'views/layouts/main.handlebars',
             'views/login.handlebars',
+            'views/logout.handlebars',
             'views/shower.handlebars',
+            'views/transportation.handlebars',
+            'views/water.handlebars',
         ]
     },
 ]
@@ -42,7 +46,8 @@ beautify_hash.forEach(function(item) {
             }
             fs.writeFile(file, item.method(data, {
                 indent_size: 4,
-                space_in_empty_paren: true
+                space_in_empty_paren: true,
+                end_with_newline: true,
             }), function(err, data) {
                 if (err) {
                     throw err;
