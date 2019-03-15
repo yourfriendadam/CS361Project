@@ -100,7 +100,7 @@ function calcEcoscore(userID, callback) {
             mysql.query('SELECT foodType FROM Food WHERE userID = ?', inserts, callback)
         },
         electricity: function(callback) {
-            mysql.query('SELECT amount FROM Electricity WHERE user_id = ?', inserts, callback)
+            mysql.query('SELECT amount FROM Electricity WHERE userID = ?', inserts, callback)
         },
         transportation: function(callback) {
             mysql.query('SELECT distance,mpg FROM Transportation WHERE user_id = ?', inserts, callback)
@@ -285,6 +285,31 @@ app.post('/food', function(req, res) {
             context.food = JSON.parse(JSON.stringify(sqlres2));
             res.render('food', context);
         });
+    });
+});
+
+app.post('/electricity', function(req, res) {
+    var context = initContext(req);
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    date = month + '/' + day + '/' + year;
+    var q1 = 'INSERT INTO Electricity (userID, date, amount) VALUES (?, ?, ?)';
+    var inserts = [req.session.userID, date, req.body.bills];
+    mysql.query(q1, inserts, function(err, result) {
+        if (err) {
+            if (err.code === 'ER_BAD_NULL_ERROR') {
+                context.errorText = "You are not currently logged in. Please go to the login page.";
+            } else {
+                context.errorText = "Unknown error!";
+                console.log(err);
+            }
+        }
+        else {
+            context.successText = "Data successfully inserted!";
+        }
+        res.render('electricity', context);
     });
 });
 
