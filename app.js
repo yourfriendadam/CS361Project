@@ -196,6 +196,12 @@ app.get("/electricity", function(req, res) {
     res.render('electricity', context);
 });
 
+app.get("/leaderboards", function(req, res){
+  var context = initContext(req);
+  context.title = 'View Leaderboards';
+  res.render('leaderboards', context);
+});
+
 app.get("/food", function(req, res) {
     var context = initContext(req);
     context.title = 'Record Food Consumption';
